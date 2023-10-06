@@ -16,9 +16,9 @@ export const ContainerContactsLabel = styled.label`
 `
 
 export const ConteinerContactsInput = styled.input`
-    background-color: ${(props) => props.theme.tagLineColor};
+    background-color: ${(props) => props.theme.themes.tagLineColor};
     border-style: ridge;
-    color: ${(props) => props.theme.titleColor}
+    color: ${(props) => props.theme.themes.titleColor}
 `
 
 export const ConteinerContactsButton = styled.button`
@@ -26,7 +26,7 @@ export const ConteinerContactsButton = styled.button`
   position: relative;
   font-size: 16px;
   border: none;
-  color: ${(props) => props.theme.buttonColor};
+  color: ${(props) => props.theme.themes.buttonColor};
   background-color: transparent;
   cursor: pointer;
   margin: 10px;
@@ -45,8 +45,8 @@ export const ConteinerContactsButton = styled.button`
       content: "";
       height: 20px;
       width: 20px;
-      border: 2px solid ${(props) => props.theme.buttonColor};
-      border-color: ${(props) => props.theme.buttonColor} ${(props) => props.theme.buttonColor} transparent transparent; 
+      border: 2px solid ${(props) => props.theme.themes.buttonColor};
+      border-color: ${(props) => props.theme.themes.buttonColor} ${(props) => props.theme.themes.buttonColor} transparent transparent; 
       position: absolute;
       top: 0px;
       right: 0px;
@@ -58,7 +58,7 @@ export const ConteinerContactsButton = styled.button`
       height: 20px;
       width: 20px;
       border: 2px solid black;
-      border-color: transparent transparent ${(props) => props.theme.buttonColor} ${(props) => props.theme.buttonColor}; 
+      border-color: transparent transparent ${(props) => props.theme.themes.buttonColor} ${(props) => props.theme.themes.buttonColor}; 
       position: absolute;
       bottom: 0px;
       left: 0px;
@@ -75,7 +75,7 @@ export const ConteinerContactsButton = styled.button`
     }
   }
   &--inner-shadow-border {
-    border: 1px solid ${(props) => props.theme.buttonColor};
+    border: 1px solid ${(props) => props.theme.themes.buttonColor};
     transition: box-shadow .3s;
     position: relative;
     &::before {
@@ -83,7 +83,7 @@ export const ConteinerContactsButton = styled.button`
       height: 100%;
       width:100%;
       position: absolute;
-      border: 1px solid ${(props) => props.theme.buttonColor};
+      border: 1px solid ${(props) => props.theme.themes.buttonColor};
       top: 0px;
       left: 0px;
       transition-property: transform,border-color;

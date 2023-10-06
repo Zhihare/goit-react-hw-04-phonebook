@@ -13,7 +13,7 @@ export const ContactsListButton = styled.button`
     border: none;
     background-color: transparent;
 	transition-duration: .8s;
-    color: ${(props) => props.theme.buttonColor};
+    color: ${(props) => props.theme.themes.buttonColor};
 
 	&:hover{
 		color:red;

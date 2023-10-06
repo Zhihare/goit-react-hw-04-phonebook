@@ -14,9 +14,6 @@ import { nanoid } from "nanoid";
 
 export function App() {
 
-  // const light = LightTheme;
-  // const dark = DarkTheme;
-
   const [contacts, setContacts] = useState(() => {
     const savedContacts = localStorage.getItem('contacts');
     return savedContacts ? JSON.parse(savedContacts) : [];
@@ -135,7 +132,7 @@ export function App() {
     <GoSun size={30} />;
 
   return (
-    <ThemeProvider theme={themes} >
+    <ThemeProvider theme={{ themes }} >
       <ConteinerApp>
         <ContentApp>
           <TitleApp title="Phonebook">Phonebook</TitleApp>

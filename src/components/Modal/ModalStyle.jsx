@@ -31,8 +31,8 @@ export const ModalWindow = styled.div`
   flex-wrap: wrap;
   align-content: space-around;
 
- background-color: ${(props) => props.theme.modalColor};
- color: ${(props) => props.theme.titleColor};
+ background-color: ${(props) => props.theme.themes.modalColor};
+ color: ${(props) => props.theme.themes.titleColor};
 
 `
 export const ModalTitle = styled.p`

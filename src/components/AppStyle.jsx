@@ -33,10 +33,10 @@ export const ConteinerApp = styled.div`
 
 export const ContentApp = styled.div`
     position: relative;
- background: ${(props) => props.theme.modalColor};
+ background: ${(props) => props.theme.themes.modalColor};
   padding: 2em;
   text-align: center;
-  color:${(props) => props.theme.titleColor};
+  color:${(props) => props.theme.themes.titleColor};
  `
 
 export const TitleApp = styled.h1`
@@ -50,7 +50,7 @@ export const ToogleDarkMode = styled.button`
   border: none;
   background-color: transparent;
   transition-duration: .8s;
-  color: ${(props) => props.theme.buttonColor};
+  color: ${(props) => props.theme.themes.buttonColor};
 
 	&:hover{
 		color:red;
