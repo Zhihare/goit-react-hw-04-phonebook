@@ -1,36 +1,35 @@
-import React, { Component } from 'react'
+import React from 'react'
 
 import { ConteinerContactsButton } from 'components/ContactsForm/CotactsFormStyle';
 import { ModalTitle, ModalWindow, Overlay } from 'components/Modal/ModalStyle';
 
-export default class ModalDelete extends Component {
+export function ModalDelete({ handleDelete, onCloseModalDelete, deleteContact }) {
 
-	deleteNumber = () => {
-		this.props.handleDelete(this.props.deleteContact);
-		this.props.onCloseModalDelete();
+	const deleteNumber = () => {
+		handleDelete(deleteContact);
+		onCloseModalDelete();
 	}
 
 
 
-	render() {
-		return (
-			<Overlay>
-				<ModalWindow>
-					<ModalTitle>Are you sure you want to delete {this.props.deleteContact}?</ModalTitle>
-					<ConteinerContactsButton type="button"
-						style={{
-							width: '150px', height: '60px',
-						}}
-						onClick={() => this.deleteNumber()}>
-						Yes</ConteinerContactsButton>
-					<ConteinerContactsButton type="button"
-						style={{
-							width: '150px', height: '60px',
-						}}
-						onClick={() => this.props.onCloseModalDelete()}
-					>No</ConteinerContactsButton>
-				</ModalWindow>
-			</Overlay>
-		)
-	}
+
+	return (
+		<Overlay>
+			<ModalWindow>
+				<ModalTitle>Are you sure you want to delete {deleteContact}?</ModalTitle>
+				<ConteinerContactsButton type="button"
+					style={{
+						width: '150px', height: '60px',
+					}}
+					onClick={() => deleteNumber()}>
+					Yes</ConteinerContactsButton>
+				<ConteinerContactsButton type="button"
+					style={{
+						width: '150px', height: '60px',
+					}}
+					onClick={() => onCloseModalDelete()}
+				>No</ConteinerContactsButton>
+			</ModalWindow>
+		</Overlay>
+	)
 }

@@ -1,48 +1,44 @@
-import React, { Component } from 'react'
-import { nanoid } from "nanoid";
+import React, { useState } from 'react'
+
 import { ContainerContactsForm, ContainerContactsLabel, ConteinerContactsButton, ConteinerContactsInput } from './CotactsFormStyle';
 
-export default class ContactsForm extends Component {
-	state = {
-		name: '',
-		number: '',
+export const ContactsForm = ({ handleAddContacts }) => {
+	const [name, setName] = useState('');
+	const [number, setNumber] = useState('');
+	// state = {
+	// 	name: '',
+	// 	number: '',
+	// }
+
+	const handleNameChenge = event => {
+		setName(event.target.value)
+		// this.setState({ [event.target.name]: event.target.value })
 	}
 
-	hendleInputChange = event => {
-		this.setState({ [event.target.name]: event.target.value })
-
+	const handleNumberChenge = event => {
+		setNumber(event.target.value)
 	}
 
-	handleSubmit = event => {
+
+	const handleSubmit = event => {
 		event.preventDefault();
-
-		const contactsData = {
-			id: nanoid(),
-			name: this.state.name,
-			number: this.state.number,
-		}
-		this.props.handleAddContact(contactsData);
-
-
-		this.setState({
-			name: '',
-			number: '',
-		});
+		handleAddContacts(name, number);
+		setName('');
+		setNumber('');
 
 	}
-	render() {
-		return (
-			<ContainerContactsForm onSubmit={this.handleSubmit}>
-				<ContainerContactsLabel>
-					<span>Name</span>
-					<ConteinerContactsInput onChange={this.hendleInputChange} value={this.state.name} type="text" name="name" required />
-				</ContainerContactsLabel>
-				<ContainerContactsLabel>
-					<span>Number</span>
-					<ConteinerContactsInput onChange={this.hendleInputChange} value={this.state.number} type="tel" name="number" required />
-				</ContainerContactsLabel>
-				<ConteinerContactsButton type="submit" >Add contact</ConteinerContactsButton>
-			</ContainerContactsForm >
-		)
-	}
+	return (
+		<ContainerContactsForm onSubmit={handleSubmit}>
+			<ContainerContactsLabel>
+				<span>Name</span>
+				<ConteinerContactsInput onChange={handleNameChenge} value={name} type="text" name="name" required />
+			</ContainerContactsLabel>
+			<ContainerContactsLabel>
+				<span>Number</span>
+				<ConteinerContactsInput onChange={handleNumberChenge} value={number} type="tel" name="number" required />
+			</ContainerContactsLabel>
+			<ConteinerContactsButton type="submit" >Add contact</ConteinerContactsButton>
+		</ContainerContactsForm >
+	)
 }
+

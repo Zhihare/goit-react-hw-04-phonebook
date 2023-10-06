@@ -1,196 +1,164 @@
-import { Component } from "react"
+import { useEffect, useState } from "react"
 import { GoSun } from 'react-icons/go';
 import { HiMoon } from 'react-icons/hi';
-import ContactsForm from "./ContactsForm/ContactsForm";
+import { ContactsForm } from "./ContactsForm/ContactsForm";
 import { ContactsList } from "./ContactsList/ContactsList";
 import { Filter } from "./Filter/Filter";
 import { ConteinerApp, ContentApp, TitleApp, ToogleDarkMode } from "./AppStyle";
-import Modal from "./Modal/Modal";
-import ModalDelete from "./ModalDelete/ModalDelete";
+import { Modal } from "./Modal/Modal";
+import { ModalDelete } from "./ModalDelete/ModalDelete";
 import { ThemeProvider } from "styled-components";
 import { DarkTheme, LightTheme } from "constants/DarkMode";
+import { nanoid } from "nanoid";
 
 
-export class App extends Component {
-  state = {
-    contacts: [
-      { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
-      { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
-      { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
-      { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
-    ],
-    filter: '',
-    modal: {
-      isOpen: false,
-      data: null,
-    },
-    modalDelete: {
-      isOpen: false,
-      data: null,
-    },
-    themes: {
-      setTheme: "light",
-      light: LightTheme,
-      dark: DarkTheme,
-    },
-  }
-  componentDidMount() {
-    const stringifiedTheme = localStorage.getItem('theme');
-    const stringifiedContacts = localStorage.getItem('contacts');
-    const parsedTheme = JSON.parse(stringifiedTheme) ?? "light";
-    const parsedContacs = JSON.parse(stringifiedContacts) ?? [];
-    this.setState({
-      contacts: parsedContacs,
-      themes: {
-        setTheme: parsedTheme,
-        light: LightTheme,
-        dark: DarkTheme,
-      }
-    });
-  }
+export function App() {
 
-  componentDidUpdate(prevProps, prevState) {
-    const stringifiedTheme = JSON.stringify(this.state.themes.setTheme);
+  const light = LightTheme;
+  const dark = DarkTheme;
+
+  const [contacts, setContacts] = useState(() => {
+    const savedContacts = localStorage.getItem('contacts');
+    return savedContacts ? JSON.parse(savedContacts) : [];
+  });
+
+  const [filter, setFilter] = useState('');
+  const [modal, setModal] = useState(false);
+  const [modalData, setModalData] = useState(null);
+  const [modalDelete, setModalDelete] = useState(false);
+  const [modalDeleteData, setModalDeleteData] = useState(null);
+
+  const [themes, setTheme] = useState(() => {
+    const savedTheme = localStorage.getItem('theme');
+    return savedTheme ? JSON.parse(savedTheme) : light;
+  });
+
+
+  useEffect(() => {
+    const stringifiedTheme = JSON.stringify(themes);
     localStorage.setItem('theme', stringifiedTheme);
 
-    if (this.state.contacts.length !== prevState.contacts.length) {
-      const stringifiedContacts = JSON.stringify(this.state.contacts);
-      localStorage.setItem('contacts', stringifiedContacts);
-    }
+    const stringifiedContacts = JSON.stringify(contacts);
+    localStorage.setItem('contacts', stringifiedContacts);
+
+  }, [contacts, themes])
+
+
+  const onOpenModal = (modalData) => {
+    setModal(true);
+    setModalData(modalData);
   }
 
 
-  handleAddContact = contactsData => {
+  const handleAddContact = (name, number) => {
 
-    if (this.state.contacts.some(contact => contact.name === contactsData.name)) {
-      alert(` A contact has already been created for this name: ${contactsData.name}`);
+    if (contacts.some(contact => contact.name === name)) {
+      alert(` A contact has already been created for this name: ${name}`);
       return;
     }
-    if (this.state.contacts.some(contact => contact.number === contactsData.number)) {
-      alert(` A contact has already been created for this number: ${contactsData.number}`);
+    if (contacts.some(contact => contact.number === number)) {
+      alert(` A contact has already been created for this number: ${number}`);
       return;
     }
-    this.onOpenModal(contactsData.name);
-    this.setState(prevState => {
-      return {
-        contacts: [...prevState.contacts, contactsData],
-      };
-    });
+
+    const newContact = {
+      id: nanoid(),
+      name,
+      number,
+    };
+
+    onOpenModal(name);
+    setContacts(prevState => [
+      ...prevState,
+      newContact,
+    ]);
+
+    reset();
   };
 
-  getContacts = () => {
-    const { filter, contacts } = this.state;
+
+  const getContacts = () => {
     const normalizedFilter = filter.toLowerCase();
     return contacts.filter(contact =>
       contact.name.toLowerCase().includes(normalizedFilter)
     );
   };
 
-
-  changeFilter = e => {
-    this.setState({ filter: e.currentTarget.value.toLowerCase() });
+  const reset = () => {
+    setFilter('');
   };
 
 
-  handleDelete = contactName => {
-    this.setState(prevState => {
-      return {
-        contacts: prevState.contacts.filter(contact => contact.name !== contactName),
-      };
-    });
+  const changeFilter = e => {
+    setFilter(e.currentTarget.value.toLowerCase());
   };
 
-  onOpenModal = (modalData) => {
-    this.setState({
-      modal: {
-        isOpen: true,
-        data: modalData,
-      },
-    });
-  }
 
-  onCloseModal = () => {
-    this.setState({
-      modal: {
-        isOpen: false,
-        data: null,
-      },
-    });
-  }
-
-  onOpenModalDelete = (modalDataDelete) => {
-    this.setState({
-      modalDelete: {
-        isOpen: true,
-        data: modalDataDelete,
-      },
-    });
-  }
-
-  onCloseModalDelete = () => {
-    this.setState({
-      modalDelete: {
-        isOpen: false,
-        data: null,
-      },
-    });
-  }
-
-
-  changeTheme = () => {
-
-    if (this.state.themes.setTheme === "light") {
-      this.setState({
-        themes: {
-          setTheme: "dark",
-          light: LightTheme,
-          dark: DarkTheme,
-        },
-      });
-    }
-    else {
-      this.setState({
-        themes: {
-          setTheme: "light",
-          light: LightTheme,
-          dark: DarkTheme,
-        },
-      });
-    }
-  };
-
-  render() {
-    const theme = this.state.themes.setTheme
-
-    const icon = this.state.themes.setTheme === "light" ?
-      <HiMoon size={30} /> :
-      <GoSun size={30} />;
-
-    return (
-      <ThemeProvider theme={this.state.themes[theme]} >
-        <ConteinerApp>
-          <ContentApp>
-            <TitleApp title="Phonebook">Phonebook</TitleApp>
-            <ContactsForm handleAddContact={this.handleAddContact} />
-            <TitleApp>Contacts</TitleApp>
-            <Filter value={this.state.filter} filter={this.changeFilter} />
-            <ContactsList
-              renderFilter={this.getContacts()}
-              onOpenModalDelete={this.onOpenModalDelete}
-            />
-            <ToogleDarkMode onClick={this.changeTheme}>{icon}</ToogleDarkMode>
-
-            {this.state.modal.isOpen && <Modal
-              newContactName={this.state.modal.data}
-              onCloseModal={this.onCloseModal} />}
-
-            {this.state.modalDelete.isOpen && <ModalDelete
-              handleDelete={this.handleDelete}
-              deleteContact={this.state.modalDelete.data}
-              onCloseModalDelete={this.onCloseModalDelete} />}
-          </ContentApp>
-        </ConteinerApp>
-      </ThemeProvider>
+  const handleDelete = contactName => {
+    setContacts(
+      contacts.filter(contact => contact.name !== contactName),
     );
+  }
+
+  const onCloseModal = () => {
+    setModal(false);
+    setModalData(null);
+  }
+
+  const onOpenModalDelete = (modalDataDelete) => {
+    setModalDelete(true);
+    setModalDeleteData(modalDataDelete);
+  }
+
+  const onCloseModalDelete = () => {
+    setModalDelete(false);
+    setModalDeleteData(null);
+  }
+
+
+  const changeTheme = () => {
+    if (themes === light) {
+      setTheme(dark);
+      return;
+    }
+    if (themes !== light) {
+      setTheme(light);
+      return;
+    }
   };
-}
+
+
+  const filterContacts = getContacts();
+
+  const icon = themes === light ?
+    <HiMoon size={30} /> :
+    <GoSun size={30} />;
+
+  return (
+    <ThemeProvider theme={themes} >
+      <ConteinerApp>
+        <ContentApp>
+          <TitleApp title="Phonebook">Phonebook</TitleApp>
+          <ContactsForm handleAddContacts={handleAddContact} />
+          <TitleApp>Contacts</TitleApp>
+          <Filter value={filter} filter={changeFilter} />
+          <ContactsList
+            renderFilter={filterContacts}
+            onOpenModalDelete={onOpenModalDelete}
+          />
+          <ToogleDarkMode onClick={changeTheme}>{icon}</ToogleDarkMode>
+
+          {modal && <Modal
+            newContactName={modalData}
+            onCloseModal={onCloseModal} />}
+
+          {modalDelete && <ModalDelete
+            handleDelete={handleDelete}
+            deleteContact={modalDeleteData}
+            onCloseModalDelete={onCloseModalDelete} />}
+        </ContentApp>
+      </ConteinerApp>
+    </ThemeProvider>
+  );
+
+};

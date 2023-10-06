@@ -1,43 +1,40 @@
-import React, { Component } from 'react'
+import React, { useEffect } from 'react'
 import { Overlay, ModalWindow, ModalTitle } from './ModalStyle'
 import { ConteinerContactsButton } from 'components/ContactsForm/CotactsFormStyle';
 
-export default class Modal extends Component {
-	componentDidMount() {
-		window.addEventListener('keydown', this.onKeyDown);
-	}
-
-	componentWillUnmount() {
-		window.removeEventListener('keydown', this.onKeyDown);
-	}
-
-	onKeyDown = event => {
+export function Modal({ onCloseModal, newContactName }) {
+	const onKeyDown = event => {
 		if (event.code === 'Escape') {
-			this.props.onCloseModal();
+			onCloseModal();
 		}
 	};
 
-	onOverlayClick = event => {
+	const onOverlayClick = event => {
 		if (event.currentTarget === event.target) {
-			this.props.onCloseModal();
+			onCloseModal();
 		}
 	};
 
+	useEffect(() => {
+		window.addEventListener('keydown', onKeyDown);
+		return () => {
+			window.removeEventListener('keydown', onKeyDown);
+		}
+	});
 
 
-	render() {
-		return (
-			<Overlay onClick={this.onOverlayClick}>
-				<ModalWindow>
-					<ModalTitle>New contact {this.props.newContactName} added to the list</ModalTitle>
-					<ConteinerContactsButton type="button"
+	return (
+		<Overlay onClick={onOverlayClick}>
+			<ModalWindow>
+				<ModalTitle>New contact {newContactName} added to the list</ModalTitle>
+				<ConteinerContactsButton type="button"
 
-						style={{
-							width: '150px', height: '60px',
-						}}
-						onClick={() => this.props.onCloseModal()}>OK</ConteinerContactsButton>
-				</ModalWindow>
-			</Overlay>
-		)
-	}
+					style={{
+						width: '150px', height: '60px',
+					}}
+					onClick={() => onCloseModal()}>OK</ConteinerContactsButton>
+			</ModalWindow>
+		</Overlay>
+	)
 }
+
