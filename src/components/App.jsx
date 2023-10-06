@@ -14,8 +14,8 @@ import { nanoid } from "nanoid";
 
 export function App() {
 
-  const light = LightTheme;
-  const dark = DarkTheme;
+  // const light = LightTheme;
+  // const dark = DarkTheme;
 
   const [contacts, setContacts] = useState(() => {
     const savedContacts = localStorage.getItem('contacts');
@@ -30,7 +30,7 @@ export function App() {
 
   const [themes, setTheme] = useState(() => {
     const savedTheme = localStorage.getItem('theme');
-    return savedTheme ? JSON.parse(savedTheme) : light;
+    return savedTheme ? JSON.parse(savedTheme) : LightTheme;
   });
 
 
@@ -117,12 +117,12 @@ export function App() {
 
 
   const changeTheme = () => {
-    if (themes === light) {
-      setTheme(dark);
+    if (themes === LightTheme) {
+      setTheme(DarkTheme);
       return;
     }
-    if (themes !== light) {
-      setTheme(light);
+    if (themes !== LightTheme) {
+      setTheme(LightTheme);
       return;
     }
   };
@@ -130,7 +130,7 @@ export function App() {
 
   const filterContacts = getContacts();
 
-  const icon = themes === light ?
+  const icon = themes === LightTheme ?
     <HiMoon size={30} /> :
     <GoSun size={30} />;
 
